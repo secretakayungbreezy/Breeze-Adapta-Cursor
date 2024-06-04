@@ -1,4 +1,5 @@
 #!/bin/bash
+
 cd /dev/shm
 git clone https://github.com/mustafaozhan/Breeze-Adapta-Cursor
 
@@ -6,15 +7,26 @@ cd Breeze-Adapta-Cursor
 PACKAGE="/usr/share/icons/Breeze-Adapta-Cursor/"
 
 if [[ -d $PACKAGE ]]; then
-    echo "Already installed, to re-install remove the $PACKAGE dir"
-    exit 1
+    	read -p "Already installed, would you like to reinstall? [y/N] " yesno < /dev/tty
+
+		case $yesno in
+        		[yY] ) echo "OK, Reinstalling in $PACKAGE..."
+                               sudo rm -r $PACKAGE && sudo mkdir $PACKAGE
+                               sudo mv *.theme cursors $PACKAGE;
+				;;
+        		[nN] ) echo "OK, Exiting...";
+                		exit 0;;
+        		* ) echo "Invalid Response"
+				        exit 1;;
+		esac
 else
-    echo "Installation in $PACKAGE ..."
 
-    sudo mkdir $PACKAGE
-    sudo mv *.theme cursors $PACKAGE
+	echo "Installing in $PACKAGE..."
 
-    echo Done
+	sudo mkdir $PACKAGE
+	sudo mv *.theme cursors $PACKAGE
+
+	echo "Done"
 fi
 
 exit 0
